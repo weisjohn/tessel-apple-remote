@@ -1,5 +1,5 @@
 var assert = require('assert');
-var captures = require('./captures');
+var buttons = require('./buttons');
 var apple = require('./');
 
 function validate_components(button, str) {
@@ -25,11 +25,9 @@ function validate_buffer(button, str) {
     assert(but == button, 'invalid button: ' + but + ' should be ' + button);
 }
 
-captures.forEach(function(capture) {
+buttons.forEach(function(capture) {
     capture.hex.forEach(function(str) {
         validate_components(capture.button, str);
         validate_buffer(capture.button, str);
     });
 });
-
-setInterval(function(){}, 1e3);

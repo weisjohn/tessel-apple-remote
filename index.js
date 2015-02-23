@@ -49,7 +49,7 @@ function bytes_from_binary(binary) {
     for (var i = 0; i < binary.length; i += 8) {
         var byte = 0;
         for (var j = 0; j < 8; j++) {
-            byte += binary[j + i] * j;
+            byte += binary[j + i] * Math.abs(8 - j);
         }
         bytes.push(byte);
     }
@@ -60,6 +60,10 @@ function valid_bytes(bytes) {
     return bytes.length == 4;
 }
 
+function valid_codes(bytes) {
+    return bytes[0] == 0xEE && bytes[1] == 0x87;
+}
+
 module.exports = {
     durations_from_hex_buffer : durations_from_hex_buffer,
     valid_leader : valid_leader,
@@ -67,4 +71,5 @@ module.exports = {
     valid_binary : valid_binary,
     bytes_from_binary: bytes_from_binary,
     valid_bytes: valid_bytes,
+    valid_codes: valid_codes,
 }

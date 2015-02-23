@@ -7,15 +7,15 @@ captures.forEach(function(capture) {
         // turn the sample string capture back into an array of hex bytes
         hex = str.match(/.{2}/g);
         var durations = apple.durations_from_hex_buffer(hex);
-        assert(apple.valid_leader(durations), 'invalid lead', durations.join());
+        assert(apple.valid_leader(durations), 'invalid lead: ' + durations.join());
 
         var binary = apple.binary_from_durations(durations);
-        assert(apple.valid_binary(durations), 'invalid binary', binary.join());
+        assert(apple.valid_binary(durations), 'invalid binary: ' + binary.join());
 
         var bytes = apple.bytes_from_binary(binary);
-        assert(apple.valid_bytes(bytes), 'invalid bytes', bytes.join(' '));
+        assert(apple.valid_bytes(bytes), 'invalid bytes: ' + bytes.join(' '));
+        assert(apple.valid_codes(bytes), 'invalid codes: ' + bytes.join(' '));
 
-        
     });
 });
 

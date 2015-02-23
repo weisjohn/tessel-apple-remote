@@ -1,6 +1,8 @@
+
 var assert = require('assert');
-var captures = require('./captures');
 var apple = require('./');
+var buttons = require('./buttons');
+var continues = require('./continues');
 
 function validate_components(button, str) {
     // turn the sample string capture back into an array of hex bytes
@@ -25,11 +27,19 @@ function validate_buffer(button, str) {
     assert(but == button, 'invalid button: ' + but + ' should be ' + button);
 }
 
-captures.forEach(function(capture) {
+function validate_continue(str) {
+    var buf = new Buffer(str, 'hex');
+    var cont = apple.continue_from_buffer(buf);
+    assert(cont, 'invalid continue: should be true');
+}
+
+buttons.forEach(function(capture) {
     capture.hex.forEach(function(str) {
         validate_components(capture.button, str);
         validate_buffer(capture.button, str);
     });
 });
 
-setInterval(function(){}, 1e3);
+continues.forEach(function(cont) {
+    validate_continue(cont);
+});

@@ -82,7 +82,7 @@ var command_map = {
     // 9: "left",
     // 10: "up",
     11: "up",
-    // 12: "down",
+    12: "down",
     13: "down"
 }
 
@@ -109,15 +109,40 @@ function button_from_buffer(data) {
     return button_from_bytes(bytes);
 }
 
+
+// determine whether or not the buffer is a valid continuation code
+function continue_from_buffer(data) {
+    var chopped = data.toString('hex').match(/.{2}/g);
+    var durations = durations_from_hex_buffer(chopped);
+
+    var on = durations[0];
+    var off = durations[1];
+    var stop = durations[2];
+
+    return (on > 8900 && on < 9150) &&
+        (off > -2350 && off < -2100) &&
+        (stop > 500 && stop < 650);
+}
+
 module.exports = function(port) {
 
     var ir = infrared.use(port);
 
     // on each data packet received, process the whole flow
+    var button;
     ir.on('data', function(data) {
-        var button = button_from_buffer(data);
-        if (!button) return;
-        ir.emit(button);
+
+        // don't do any processing if we're just getting interference
+        if (data.length < 6) return;
+
+        // continues are short, buttons long
+        if (data.length == 6) {
+            // we can't send a continue if we miss the first button press
+            if (button && continue_from_buffer(data)) ir.emit(button + ".long");
+        } else if (data.length == 134) {
+            button = button_from_buffer(data);
+            if (button) ir.emit(button);
+        }
     });
 
     return ir;
@@ -133,3 +158,4 @@ module.exports.valid_bytes = valid_bytes;
 module.exports.valid_codes = valid_codes;
 module.exports.button_from_bytes = button_from_bytes;
 module.exports.button_from_buffer = button_from_buffer;
+module.exports.continue_from_buffer = continue_from_buffer;

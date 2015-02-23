@@ -12,6 +12,9 @@ captures.forEach(function(capture) {
         var binary = apple.binary_from_durations(durations);
         assert(apple.valid_binary(durations), 'invalid binary', binary.join());
 
+        var bytes = apple.bytes_from_binary(binary);
+        assert(apple.valid_bytes(bytes), 'invalid bytes', bytes.join(' '));
+
         
     });
 });

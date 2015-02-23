@@ -41,7 +41,23 @@ function binary_from_durations(durations) {
 }
 
 function valid_binary(binary) {
-    return (binary.length != 32);
+    return binary.length != 32;
+}
+
+function bytes_from_binary(binary) {
+    var bytes = [];
+    for (var i = 0; i < binary.length; i += 8) {
+        var byte = 0;
+        for (var j = 0; j < 8; j++) {
+            byte += binary[j + i] * j;
+        }
+        bytes.push(byte);
+    }
+    return bytes;
+}
+
+function valid_bytes(bytes) {
+    return bytes.length == 4;
 }
 
 module.exports = {
@@ -49,4 +65,6 @@ module.exports = {
     valid_leader : valid_leader,
     binary_from_durations: binary_from_durations,
     valid_binary : valid_binary,
+    bytes_from_binary: bytes_from_binary,
+    valid_bytes: valid_bytes,
 }

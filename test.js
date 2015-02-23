@@ -15,7 +15,6 @@ captures.forEach(function(capture) {
         var bytes = apple.bytes_from_binary(binary);
         assert(apple.valid_bytes(bytes), 'invalid bytes: ' + bytes.join(' '));
         assert(apple.valid_codes(bytes), 'invalid codes: ' + bytes.join(' '));
-
     });
 });
 

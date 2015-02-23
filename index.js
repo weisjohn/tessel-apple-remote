@@ -46,12 +46,15 @@ function valid_binary(binary) {
 
 function bytes_from_binary(binary) {
     var bytes = [];
-    for (var i = 0; i < binary.length; i += 8) {
+
+    // http://en.wikipedia.org/wiki/Apple_Remote#Technical_details
+    // because the least significant bit comes first, we parse backwards
+    for (var i = binary.length; i > 0; i -= 8) {
         var byte = 0;
         for (var j = 0; j < 8; j++) {
-            byte += binary[j + i] * Math.abs(8 - j);
+            byte += "" + binary[i - j - 1];
         }
-        bytes.push(byte);
+        bytes.unshift(parseInt(byte, 2));
     }
     return bytes;
 }

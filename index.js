@@ -1,3 +1,4 @@
+var infrared = require('ir-attx4');
 
 // parse a Buffer|Array of 16 bit words into signed int durations
 function durations_from_hex_buffer(buf) {
@@ -88,13 +89,45 @@ function button_from_bytes(bytes) {
     return command_map[bytes[2]];
 }
 
-module.exports = {
-    durations_from_hex_buffer : durations_from_hex_buffer,
-    valid_leader : valid_leader,
-    binary_from_durations: binary_from_durations,
-    valid_binary : valid_binary,
-    bytes_from_binary: bytes_from_binary,
-    valid_bytes: valid_bytes,
-    valid_codes: valid_codes,
-    button_from_bytes: button_from_bytes
+// a small implementation of the whole flow
+function button_from_buffer(data) {
+
+    var chopped = data.toString('hex').match(/.{2}/g);
+    var durations = durations_from_hex_buffer(chopped);
+
+    if (!valid_leader(durations)) return;
+
+    var binary = binary_from_durations(durations);
+    if (!valid_binary(durations)) return;
+
+    var bytes = bytes_from_binary(binary);
+    if (!valid_bytes(bytes)) return;
+    if (!valid_codes(bytes)) return;
+
+    return button_from_bytes(bytes);
 }
+
+module.exports = function(port) {
+
+    var ir = infrared.use(port);
+
+    // on each data packet received, process the whole flow
+    ir.on('data', function(data) {
+        var button = button_from_buffer(data);
+        if (!button) return;
+        ir.emit(button);
+    });
+
+    return ir;
+}
+
+// expose additional functionality to allow for easy testing
+module.exports.durations_from_hex_buffer = durations_from_hex_buffer;
+module.exports.valid_leader = valid_leader;
+module.exports.binary_from_durations = binary_from_durations;
+module.exports.valid_binary = valid_binary;
+module.exports.bytes_from_binary = bytes_from_binary;
+module.exports.valid_bytes = valid_bytes;
+module.exports.valid_codes = valid_codes;
+module.exports.button_from_bytes = button_from_bytes;
+module.exports.button_from_buffer = button_from_buffer;

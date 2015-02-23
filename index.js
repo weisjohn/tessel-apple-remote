@@ -1,5 +1,11 @@
 var infrared = require('ir-attx4');
 
+// understanding the implementation:
+// https://github.com/tessel/ir-attx4#api-infrared-on-data-callback-data-Emitted-when-an-infrared-signal-is-detected
+// http://techdocs.altium.com/display/FPGA/NEC+Infrared+Transmission+Protocol
+// http://en.wikipedia.org/wiki/Apple_Remote#Technical_details
+// https://github.com/squeed/AppleRemoteSender/blob/master/AppleRemoteSender.cpp
+
 // parse a Buffer|Array of 16 bit words into signed int durations
 function durations_from_hex_buffer(buf) {
     // https://github.com/tessel/ir-attx4 sends off values through a two's complement system
@@ -13,9 +19,6 @@ function durations_from_hex_buffer(buf) {
     }
     return durations;
 }
-
-// http://en.wikipedia.org/wiki/Apple_Remote#Technical_details
-// provides all the understanding of the magic values used
 
 // validate the leader bit 
 function valid_leader(durations) {
@@ -48,8 +51,7 @@ function valid_binary(binary) {
 function bytes_from_binary(binary) {
     var bytes = [];
 
-    // http://en.wikipedia.org/wiki/Apple_Remote#Technical_details
-    // because the least significant bit comes first, we parse backwards
+    // parse backwards, the least significant bit comes first
     for (var i = binary.length; i > 0; i -= 8) {
         var byte = 0;
         for (var j = 0; j < 8; j++) {

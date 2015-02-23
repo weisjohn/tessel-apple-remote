@@ -67,6 +67,27 @@ function valid_codes(bytes) {
     return bytes[0] == 0xEE && bytes[1] == 0x87;
 }
 
+// using the byte array, return a string name
+var command_map = {
+    2: "menu",
+    // 3: "menu",
+    4: "center",
+    // 5: "center",
+    // 6: "right",
+    7: "right",
+    8: "left",
+    // 9: "left",
+    // 10: "up",
+    11: "up",
+    // 12: "down",
+    13: "down"
+}
+
+
+function button_from_bytes(bytes) {
+    return command_map[bytes[2]];
+}
+
 module.exports = {
     durations_from_hex_buffer : durations_from_hex_buffer,
     valid_leader : valid_leader,
@@ -75,4 +96,5 @@ module.exports = {
     bytes_from_binary: bytes_from_binary,
     valid_bytes: valid_bytes,
     valid_codes: valid_codes,
+    button_from_bytes: button_from_bytes
 }

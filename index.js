@@ -20,17 +20,8 @@ function verify_leader(durations) {
     return !(on < 8900 || on > 9150 || off < -4600 || off > -4500);
 }
 
-var captures = require('./captures');
 
-captures.forEach(function(capture) {
-    capture.hex.forEach(function(str) {
-        // turn the sample string capture back into an array of hex bytes
-        hex = str.match(/.{2}/g);
-        var durations = durations_from_hex_buffer(hex);
-        if (!verify_leader(durations)) {
-            console.log('miss', durations.join())
-        }
-    });
-});
-
-setInterval(function() {}, 1e3);
+module.exports = {
+    durations_from_hex_buffer : durations_from_hex_buffer,
+    verify_leader : verify_leader
+}

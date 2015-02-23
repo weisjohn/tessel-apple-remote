@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/weisjohn/tessel-apple-ir-remote/issues"
   },
-  "homepage": "https://github.com/weisjohn/tessel-apple-ir-remote"
+  "homepage": "https://github.com/weisjohn/tessel-apple-ir-remote",
+  "dependencies": {
+    "ir-attx4": "^0.2.6"
+  }
 }

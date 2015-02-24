@@ -16,14 +16,14 @@ function validate_components(button, str) {
     var bytes = apple.bytes_from_binary(binary);
     assert(apple.valid_bytes(bytes), 'invalid bytes: ' + bytes.join(' '));
 
-    var but = apple.button_from_bytes(bytes);
-    assert(but == button, 'invalid button: ' + bytes[2] + ' should be ' + button);
+    var command_id = apple.command_id_from_bytes(bytes);
+    assert(command_id.command == button, 'invalid button: ' + bytes[2] + ' should be ' + button);
 }
 
 function validate_buffer(button, str) {
     var buf = new Buffer(str, 'hex');
-    var but = apple.button_from_buffer(buf);
-    assert(but == button, 'invalid button: ' + but + ' should be ' + button);
+    var command_id = apple.command_id_from_buffer(buf);
+    assert(command_id.command == button, 'invalid button: ' + command_id.command + ' should be ' + button);
 }
 
 function validate_continue(str) {

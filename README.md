@@ -14,10 +14,6 @@ var apple = require('tessel-apple-ir-remote')(port);
 apple.on('menu', function() {
     console.log('menu');
 });
-
-apple.on('data', function(data) {
-    // you still have access to the low-level data stream
-});
 ```
 
 ### events
@@ -44,7 +40,44 @@ Each event name has a corresponding `[name].long` event for long presses:
 
 NOTE: both `play` and `play.long` only apply to the 2nd Generation remote.
 
-Low-level buffer data: You can still listen to the `data` event.
+Each Apple Remote sends along a simple remote ID between 0-255 (0xFF). To differentiate between remotes, you can prefix both the command events and continuation events with that id. For example, if your remote had the ID of 50
+
+```javascript
+apple.on('50.menu', function() {
+    console.log('my remote clicked "menu"');
+});
+```
+
+To enable discovery on the fly of remote IDs, an `id` event is emitted, with a value of the new id:
+
+```
+apple.on('id', function(id) {
+    console.log('a new challenger appears', id);
+});
+```
+
+To test this, you can either use two remotes, or you can first press a button on the remote, notice the `id` event fires, then change your remote's ID by pressing and holding the menu + center buttons for about 10 seconds. After changing your ID you will not see any event handlers fire for the old ID.
+
+##### `data`
+
+The standard `data` event is unmodified.
+
+```
+apple.on('data', function(data) {
+    // access to the low-level duration stream
+    console.log(data.toString('hex'));
+});
+```
+##### `error`
+
+The standard `error` event is unmodified.
+
+```
+apple.on('error', function(error) {
+    console.log(error);
+});
+```
+
 
 ### examples
 

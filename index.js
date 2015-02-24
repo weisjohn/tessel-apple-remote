@@ -83,6 +83,7 @@ var commands = {
         7: "right",
         8: "left",
         9: "left",
+        10: "up",
         11: "up",
         12: "down",
         13: "down",

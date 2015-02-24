@@ -40,6 +40,8 @@ Each event name has a corresponding `[name].long` event for long presses:
 
 NOTE: both `play` and `play.long` only apply to the 2nd Generation remote.
 
+##### `id`
+
 Each Apple Remote sends along a simple remote ID between 0-255 (0xFF). To differentiate between remotes, you can prefix both the command events and continuation events with that id. For example, if your remote had the ID of 50
 
 ```javascript

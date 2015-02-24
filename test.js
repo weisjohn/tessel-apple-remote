@@ -33,16 +33,16 @@ function validate_continue(str) {
 }
 
 buttons.forEach(function(capture) {
-    // capture.first.forEach(function(str) {
-    //     validate_components(capture.button, str);
-    //     validate_buffer(capture.button, str);
-    // });
-
-    console.log(capture.button)
-    capture.second.forEach(function(str) {
+    capture.first.forEach(function(str) {
         validate_components(capture.button, str);
-        // validate_buffer(capture.button, str);
+        validate_buffer(capture.button, str);
     });
+
+    // console.log(capture.button)
+    // capture.second.forEach(function(str) {
+    //     validate_components(capture.button, str);
+    //     // validate_buffer(capture.button, str);
+    // });
 });
 
 continues.forEach(function(cont) {

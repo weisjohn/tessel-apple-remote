@@ -54,7 +54,7 @@ function bytes_from_binary(binary) {
     // parse backwards, the least significant bit comes first
     for (var i = binary.length; i > 0; i -= 8) {
         var byte = 0;
-        for (var j = 0; j < 8; j++) {
+        for (var j = 0; j < 7; j++) {
             byte += "" + binary[i - j - 1];
         }
         bytes.unshift(parseInt(byte, 2));
@@ -74,21 +74,16 @@ function is_first_gen(bytes) {
 
 // using the byte array, return a string name
 var commands = {
-    "first": {
-        2: "menu",
-        3: "menu",
-        4: "center",
-        5: "center",
-        6: "right",
-        7: "right",
-        8: "left",
-        9: "left",
-        10: "up",
-        11: "up",
-        12: "down",
-        13: "down",
+    "all": {
+        1: "menu",
+        2: "center",
+        3: "right",
+        4: "left",
+        5: "up",
+        6: "down"
     },
     "second": {
+        1: "menu",
         3: "menu",
         7: "menu",
         9: "left",
@@ -127,7 +122,7 @@ var commands = {
 // switch between first and second generation maps
 function button_from_bytes(bytes) {
     // console.log(bytes)
-    return commands[ is_first_gen(bytes) ? "first" : "second" ][bytes[2]];
+    return commands["all"][bytes[2]];
 }
 
 // a small implementation of the whole flow

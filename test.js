@@ -47,5 +47,3 @@ buttons.forEach(function(capture) {
 continues.forEach(function(cont) {
     validate_continue(cont);
 });
-
-setInterval(function() {}, 1e3);

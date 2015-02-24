@@ -68,9 +68,9 @@ function valid_bytes(bytes) {
     return bytes.length == 4;
 }
 
-// first gen remotes send the Apple-specific ID
-function is_first_gen(bytes) {
-    return bytes[0] == 0xEE && bytes[1] == 0x87;
+// validate the Apple-specific ID
+function valid_codes(bytes) {
+    return bytes[0] == 0x77 && bytes[1] == 0x43;
 }
 
 
@@ -104,6 +104,7 @@ function button_from_buffer(data) {
 
     var bytes = bytes_from_binary(binary);
     if (!valid_bytes(bytes)) return;
+    if (!valid_codes(bytes)) return;
 
     return button_from_bytes(bytes);
 }

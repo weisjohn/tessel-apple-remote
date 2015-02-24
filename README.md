@@ -30,7 +30,7 @@ Simple button presses or clicks:
  - `down`
  - `right`
  - `left`
- - `play` (2nd Generation only)
+ - `play`
 
 Each event name has a corresponding `[name].long` event for long presses:
 
@@ -40,7 +40,9 @@ Each event name has a corresponding `[name].long` event for long presses:
  - `down.long`
  - `right.long`
  - `left.long`
- - `play.long` (2nd Generation only)
+ - `play.long`
+
+NOTE: both `play` and `play.long` only apply to the 2nd Generation remote.
 
 Low-level buffer data: You can still listen to the `data` event.
 

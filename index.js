@@ -5,6 +5,7 @@ var infrared = require('ir-attx4');
 // http://techdocs.altium.com/display/FPGA/NEC+Infrared+Transmission+Protocol
 // http://en.wikipedia.org/wiki/Apple_Remote#Technical_details
 // https://github.com/squeed/AppleRemoteSender/blob/master/AppleRemoteSender.cpp
+// https://hifiduino.wordpress.com/apple-aluminum-remote/ 
 
 // parse a Buffer|Array of 16 bit words into signed int durations
 function durations_from_hex_buffer(buf) {
@@ -24,7 +25,7 @@ function durations_from_hex_buffer(buf) {
 function valid_leader(durations) {
     var on = durations[0];
     var off = durations[1];
-    return !(on < 8900 || on > 9150 || off < -4600 || off > -4500);
+    return !(on < 8900 || on > 9150 || off < -4600 || off > -4400);
 }
 
 function binary_from_durations(durations) {
@@ -33,7 +34,7 @@ function binary_from_durations(durations) {
     for (var i = 2; i < durations.length - 1; i += 2) {
         var on = durations[i];
         var off = durations[i + 1];
-        if (on >= 550 && on < 700) {
+        if (on >= 500 && on < 700) {
             if (off <= -500 && off >= -650) {
                 binary.push(0);
             } else if (off < -1600 && off >= -1750) {
@@ -41,6 +42,7 @@ function binary_from_durations(durations) {
             }
         }
     }
+
     return binary;
 }
 
@@ -54,7 +56,7 @@ function bytes_from_binary(binary) {
     // parse backwards, the least significant bit comes first
     for (var i = binary.length; i > 0; i -= 8) {
         var byte = 0;
-        for (var j = 0; j < 8; j++) {
+        for (var j = 0; j < 7; j++) {
             byte += "" + binary[i - j - 1];
         }
         bytes.unshift(parseInt(byte, 2));
@@ -66,29 +68,27 @@ function valid_bytes(bytes) {
     return bytes.length == 4;
 }
 
-function valid_codes(bytes) {
+// first gen remotes send the Apple-specific ID
+function is_first_gen(bytes) {
     return bytes[0] == 0xEE && bytes[1] == 0x87;
 }
 
+
 // using the byte array, return a string name
-var command_map = {
-    2: "menu",
-    // 3: "menu",
-    4: "center",
-    // 5: "center",
-    // 6: "right",
-    7: "right",
-    8: "left",
-    // 9: "left",
-    // 10: "up",
-    11: "up",
-    12: "down",
-    13: "down"
+var commands = {
+    1: "menu",
+    2: "center",
+    3: "right",
+    4: "left",
+    5: "up",
+    6: "down",
+    46: "center",
+    47: "play"
 }
 
-
+// switch between first and second generation maps
 function button_from_bytes(bytes) {
-    return command_map[bytes[2]];
+    return commands[bytes[2]];
 }
 
 // a small implementation of the whole flow
@@ -104,7 +104,6 @@ function button_from_buffer(data) {
 
     var bytes = bytes_from_binary(binary);
     if (!valid_bytes(bytes)) return;
-    if (!valid_codes(bytes)) return;
 
     return button_from_bytes(bytes);
 }
@@ -155,7 +154,6 @@ module.exports.binary_from_durations = binary_from_durations;
 module.exports.valid_binary = valid_binary;
 module.exports.bytes_from_binary = bytes_from_binary;
 module.exports.valid_bytes = valid_bytes;
-module.exports.valid_codes = valid_codes;
 module.exports.button_from_bytes = button_from_bytes;
 module.exports.button_from_buffer = button_from_buffer;
 module.exports.continue_from_buffer = continue_from_buffer;

@@ -15,7 +15,6 @@ function validate_components(button, str) {
 
     var bytes = apple.bytes_from_binary(binary);
     assert(apple.valid_bytes(bytes), 'invalid bytes: ' + bytes.join(' '));
-    assert(apple.valid_codes(bytes), 'invalid codes: ' + bytes.join(' '));
 
     var but = apple.button_from_bytes(bytes);
     assert(but == button, 'invalid button: ' + bytes[2] + ' should be ' + button);
@@ -34,7 +33,12 @@ function validate_continue(str) {
 }
 
 buttons.forEach(function(capture) {
-    capture.hex.forEach(function(str) {
+    capture.first.forEach(function(str) {
+        validate_components(capture.button, str);
+        validate_buffer(capture.button, str);
+    });
+
+    capture.second.forEach(function(str) {
         validate_components(capture.button, str);
         validate_buffer(capture.button, str);
     });
@@ -43,3 +47,5 @@ buttons.forEach(function(capture) {
 continues.forEach(function(cont) {
     validate_continue(cont);
 });
+
+setInterval(function() {}, 1e3);

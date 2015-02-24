@@ -38,11 +38,10 @@ buttons.forEach(function(capture) {
         validate_buffer(capture.button, str);
     });
 
-    // console.log(capture.button)
-    // capture.second.forEach(function(str) {
-    //     validate_components(capture.button, str);
-    //     // validate_buffer(capture.button, str);
-    // });
+    capture.second.forEach(function(str) {
+        validate_components(capture.button, str);
+        validate_buffer(capture.button, str);
+    });
 });
 
 continues.forEach(function(cont) {

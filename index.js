@@ -87,12 +87,13 @@ var commands = {
 }
 
 // switch between first and second generation maps
-function button_from_bytes(bytes) {
-    return commands[bytes[2]];
+function command_id_from_bytes(bytes) {
+    if (!commands[bytes[2]]) return;
+    return { command : commands[bytes[2]], id : bytes[3] };
 }
 
 // a small implementation of the whole flow
-function button_from_buffer(data) {
+function command_id_from_buffer(data) {
 
     var chopped = data.toString('hex').match(/.{2}/g);
     var durations = durations_from_hex_buffer(chopped);
@@ -106,7 +107,7 @@ function button_from_buffer(data) {
     if (!valid_bytes(bytes)) return;
     if (!valid_codes(bytes)) return;
 
-    return button_from_bytes(bytes);
+    return command_id_from_bytes(bytes);
 }
 
 
@@ -129,7 +130,7 @@ module.exports = function(port) {
     var ir = infrared.use(port);
 
     // on each data packet received, process the whole flow
-    var button;
+    var button, id;
     ir.on('data', function(data) {
 
         // don't do any processing if we're just getting interference
@@ -138,10 +139,21 @@ module.exports = function(port) {
         // continues are short, buttons long
         if (data.length == 6) {
             // we can't send a continue if we miss the first button press
-            if (button && continue_from_buffer(data)) ir.emit(button + ".long");
+            if (button && continue_from_buffer(data)) {
+                ir.emit(button + ".long");
+                ir.emit(id + "." + button + ".long");
+            }
         } else if (data.length == 134) {
-            button = button_from_buffer(data);
-            if (button) ir.emit(button);
+            command_id = command_id_from_buffer(data);
+            if (command_id) {
+                button = command_id.command;
+                if (id != command_id.id) {
+                    id = command_id.id
+                    ir.emit('id', id);
+                }
+                ir.emit(button);
+                ir.emit(command_id.id + "." + button);
+            } 
         }
     });
 
@@ -155,6 +167,6 @@ module.exports.binary_from_durations = binary_from_durations;
 module.exports.valid_binary = valid_binary;
 module.exports.bytes_from_binary = bytes_from_binary;
 module.exports.valid_bytes = valid_bytes;
-module.exports.button_from_bytes = button_from_bytes;
-module.exports.button_from_buffer = button_from_buffer;
+module.exports.command_id_from_bytes = command_id_from_bytes;
+module.exports.command_id_from_buffer = command_id_from_buffer;
 module.exports.continue_from_buffer = continue_from_buffer;

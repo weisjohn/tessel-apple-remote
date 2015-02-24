@@ -58,7 +58,7 @@ apple.on('id', function(id) {
 });
 ```
 
-To test this, you can either use two remotes, or you can first press a button on the remote, notice the `id` event fires, then change your remote's ID by pressing and holding the menu + center buttons for about 10 seconds. After changing your ID you will not see any event handlers fire for the old ID.
+To test this, you can either use two remotes, or you can first press a button on the remote, notice the `id` event fires, then change your remote's ID by pressing and holding the menu + center buttons for about 10 seconds. Once your remote's ID is changed, you should see another `id` event emitted on the next button press.
 
 ##### `data`
 

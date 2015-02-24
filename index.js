@@ -130,7 +130,7 @@ module.exports = function(port) {
     var ir = infrared.use(port);
 
     // on each data packet received, process the whole flow
-    var button, id;
+    var button, ids = {}, id;
     ir.on('data', function(data) {
 
         // don't do any processing if we're just getting interference
@@ -148,8 +148,9 @@ module.exports = function(port) {
             if (command_id) {
                 button = command_id.command;
                 if (id != command_id.id) {
-                    id = command_id.id
-                    ir.emit('id', id);
+                    id = command_id.id;
+                    if (!ids[id]) ir.emit('id', id);
+                    ids[id] = true;
                 }
                 ir.emit(button);
                 ir.emit(command_id.id + "." + button);

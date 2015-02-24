@@ -50,7 +50,7 @@ apple.on('50.menu', function() {
 });
 ```
 
-To enable discovery on the fly of remote IDs, an `id` event is emitted, with a value of the new id:
+To enable discovery on the fly of remote IDs, an `id` event is emitted, with a value of the new id. This event will only be emitted the first time that ID is encountered.
 
 ```
 apple.on('id', function(id) {

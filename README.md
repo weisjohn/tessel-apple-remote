@@ -22,10 +22,30 @@ apple.on('data', function(data) {
 
 ### events
 
+Simple button presses or clicks:
+
  - `menu`
  - `center`
  - `up`
  - `down`
  - `right`
  - `left`
+ - `play` (2nd Generation only)
 
+Each event name has a corresponding `[name].long` event for long presses:
+
+ - `menu.long`
+ - `center.long`
+ - `up.long`
+ - `down.long`
+ - `right.long`
+ - `left.long`
+ - `play.long` (2nd Generation only)
+
+Low-level buffer data: You can still listen to the `data` event.
+
+### examples
+
+1. Plug the IR module into Port A on your Tessel, then connect via USB
+2. `tessel run [script]` to test scripts in [examples](./examples) folder.
+3. Click buttons on your remote and commence mad science.

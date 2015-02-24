@@ -5,6 +5,7 @@ var infrared = require('ir-attx4');
 // http://techdocs.altium.com/display/FPGA/NEC+Infrared+Transmission+Protocol
 // http://en.wikipedia.org/wiki/Apple_Remote#Technical_details
 // https://github.com/squeed/AppleRemoteSender/blob/master/AppleRemoteSender.cpp
+// https://hifiduino.wordpress.com/apple-aluminum-remote/ 
 
 // parse a Buffer|Array of 16 bit words into signed int durations
 function durations_from_hex_buffer(buf) {
@@ -81,7 +82,8 @@ var commands = {
     4: "left",
     5: "up",
     6: "down",
-    46: "center"
+    46: "center",
+    47: "play"
 }
 
 // switch between first and second generation maps

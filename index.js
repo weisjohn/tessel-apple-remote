@@ -33,7 +33,7 @@ function binary_from_durations(durations) {
     for (var i = 2; i < durations.length - 1; i += 2) {
         var on = durations[i];
         var off = durations[i + 1];
-        if (on >= 550 && on < 700) {
+        if (on >= 500 && on < 700) {
             if (off <= -500 && off >= -650) {
                 binary.push(0);
             } else if (off < -1600 && off >= -1750) {
@@ -41,6 +41,7 @@ function binary_from_durations(durations) {
             }
         }
     }
+
     return binary;
 }
 
@@ -74,55 +75,18 @@ function is_first_gen(bytes) {
 
 // using the byte array, return a string name
 var commands = {
-    "all": {
-        1: "menu",
-        2: "center",
-        3: "right",
-        4: "left",
-        5: "up",
-        6: "down"
-    },
-    "second": {
-        1: "menu",
-        3: "menu",
-        7: "menu",
-        9: "left",
-        10: "up",
-        11: "left",
-        12: "right",
-        14: "menu",
-        16: "up",
-        18: "left",
-        19: "left",
-        20: "right",
-        22: "left",
-        24: "left",
-        25: "down",
-        26: "right",
-        28: "menu",
-        33: "right",
-        38: "left",
-        40: "up",
-        44: "left",
-        48: "right",
-        52: "right",
-        93: "center",
-        100: "center",
-        114: "center",
-        116: "center",
-        176: "center",
-        178: "center",
-        184: "center",
-        185: "center",
-        228: "center",
-        232: "center"
-    }
+    1: "menu",
+    2: "center",
+    3: "right",
+    4: "left",
+    5: "up",
+    6: "down",
+    46: "center"
 }
 
 // switch between first and second generation maps
 function button_from_bytes(bytes) {
-    // console.log(bytes)
-    return commands["all"][bytes[2]];
+    return commands[bytes[2]];
 }
 
 // a small implementation of the whole flow

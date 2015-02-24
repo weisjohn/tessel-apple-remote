@@ -24,7 +24,7 @@ function durations_from_hex_buffer(buf) {
 function valid_leader(durations) {
     var on = durations[0];
     var off = durations[1];
-    return !(on < 8900 || on > 9150 || off < -4600 || off > -4500);
+    return !(on < 8900 || on > 9150 || off < -4600 || off > -4400);
 }
 
 function binary_from_durations(durations) {
@@ -66,29 +66,67 @@ function valid_bytes(bytes) {
     return bytes.length == 4;
 }
 
-function valid_codes(bytes) {
+// first gen remotes send the Apple-specific ID
+function is_first_gen(bytes) {
     return bytes[0] == 0xEE && bytes[1] == 0x87;
 }
 
+
 // using the byte array, return a string name
-var command_map = {
-    2: "menu",
-    // 3: "menu",
-    4: "center",
-    // 5: "center",
-    // 6: "right",
-    7: "right",
-    8: "left",
-    // 9: "left",
-    // 10: "up",
-    11: "up",
-    12: "down",
-    13: "down"
+var commands = {
+    "first": {
+        2: "menu",
+        3: "menu",
+        4: "center",
+        5: "center",
+        6: "right",
+        7: "right",
+        8: "left",
+        9: "left",
+        11: "up",
+        12: "down",
+        13: "down",
+    },
+    "second": {
+        3: "menu",
+        7: "menu",
+        9: "left",
+        10: "up",
+        11: "left",
+        12: "right",
+        14: "menu",
+        16: "up",
+        18: "left",
+        19: "left",
+        20: "right",
+        22: "left",
+        24: "left",
+        25: "down",
+        26: "right",
+        28: "menu",
+        33: "right",
+        38: "left",
+        40: "up",
+        44: "left",
+        48: "right",
+        52: "right",
+        93: "center",
+        100: "center",
+        114: "center",
+        116: "center",
+        176: "center",
+        178: "center",
+        184: "center",
+        185: "center",
+        228: "center",
+        232: "center"
+    }
 }
 
-
+// switch between first and second generation maps
 function button_from_bytes(bytes) {
-    return command_map[bytes[2]];
+    // console.log(bytes)
+    return commands[ is_first_gen(bytes) ? "first" : "second" ][bytes[2]];
 }
 
 // a small implementation of the whole flow
@@ -104,7 +142,6 @@ function button_from_buffer(data) {
 
     var bytes = bytes_from_binary(binary);
     if (!valid_bytes(bytes)) return;
-    if (!valid_codes(bytes)) return;
 
     return button_from_bytes(bytes);
 }
@@ -155,7 +192,6 @@ module.exports.binary_from_durations = binary_from_durations;
 module.exports.valid_binary = valid_binary;
 module.exports.bytes_from_binary = bytes_from_binary;
 module.exports.valid_bytes = valid_bytes;
-module.exports.valid_codes = valid_codes;
 module.exports.button_from_bytes = button_from_bytes;
 module.exports.button_from_buffer = button_from_buffer;
 module.exports.continue_from_buffer = continue_from_buffer;

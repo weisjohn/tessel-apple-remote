@@ -11,13 +11,8 @@ var infrared = require('ir-attx4');
 function durations_from_hex_buffer(buf) {
     // https://github.com/tessel/ir-attx4 sends off values through a two's complement system
     var durations = [];
-    var complement = false;
     for (var i = 0; i < buf.length; i += 2) {
-        // var number = parseInt("" + buf[i] + buf[i + 1], 16);
-        var number = buf.readInt16BE(i);
-        // if (complement) { number = number - (0xffff + 1); }
-        complement = !complement;
-        if (!isNaN(number)) durations.push(number);
+        durations.push(buf.readInt16BE(i));
     }
     return durations;
 }
@@ -157,6 +152,7 @@ module.exports = function(port) {
                 ir.emit(command_id.id + "." + button);
             } 
         }
+
     });
 
     return ir;

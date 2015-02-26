@@ -7,7 +7,7 @@ var continues = require('./continues');
 function validate_components(button, str) {
     // turn the sample string capture back into an array of hex bytes
     var hex = new Buffer(str, 'hex');
-    var durations = apple.durations_from_hex_buffer(hex);
+    var durations = apple.command_durations_from_hex_buffer(hex);
     assert(apple.valid_leader(durations), 'invalid lead: ' + durations.join());
 
     var binary = apple.binary_from_durations(durations);

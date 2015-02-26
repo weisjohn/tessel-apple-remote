@@ -7,33 +7,48 @@ var infrared = require('ir-attx4');
 // https://github.com/squeed/AppleRemoteSender/blob/master/AppleRemoteSender.cpp
 // https://hifiduino.wordpress.com/apple-aluminum-remote/ 
 
+
 // parse a Buffer|Array of 16 bit words into signed int durations
-function durations_from_hex_buffer(buf) {
+// command variant, 134 16bit dwords becomes 67[]int
+var command_durations = new Array(67);
+function command_durations_from_hex_buffer(buf) {
     // https://github.com/tessel/ir-attx4 sends off values through a two's complement system
-    var len = buf.length;
-    var durations = new Array(len / 2);
-    for (var i = 0; i < len; i += 2) {
-        durations[i / 2] = buf.readInt16BE(i);
+    for (var i = 0; i < 134; i += 2) {
+        command_durations[i / 2] = buf.readInt16BE(i);
     }
-    return durations;
+    return command_durations;
+}
+
+
+// parse a Buffer|Array of 16 bit words into signed int durations
+// continue variant, 6 16bit dwords becomes 3[]int
+var continue_durations = new Array(3);
+function continue_durations_from_hex_buffer(buf) {
+    // https://github.com/tessel/ir-attx4 sends off values through a two's complement system
+    for (var i = 0; i < 6; i += 2) {
+        continue_durations[i / 2] = buf.readInt16BE(i);
+    }
+    return continue_durations;
 }
 
 // validate the leader bit 
 function valid_leader(durations) {
     var on = durations[0];
     var off = durations[1];
-    return !(on < 8900 || on > 9150 || off < -4600 || off > -4400);
+    return (8900 < on && on < 9200) && (-4600 < off && off < -4350);
 }
 
+// only used to process commands
+var binary = new Array(32);
 function binary_from_durations(durations) {
-    var binary = new Array(32);
     // skip the leader, ignore the stop bit
-    var len = durations.length - 1;
+    var len = durations.length - 1, on, off;
     for (var i = 2; i < len; i += 2) {
-        var on = durations[i];
-        var off = durations[i + 1];
+        on = durations[i];
+        off = durations[i + 1];
         if (on >= 500 && on < 700) {
             if (off <= -500 && off >= -650) {
+                // basically a fast .push()
                 binary[i / 2 - 1] = 0;
             } else if (off < -1600 && off >= -1750) {
                 binary[i / 2 - 1] = 1;
@@ -48,8 +63,8 @@ function valid_binary(binary) {
     return binary.length == 32;
 }
 
+var bytes = new Array(4);
 function bytes_from_binary(binary) {
-    var bytes = new Array(4);
 
     // parse backwards, the least significant bit comes first
     var len = binary.length;
@@ -95,8 +110,7 @@ function command_id_from_bytes(bytes) {
 // a small implementation of the whole flow
 function command_id_from_buffer(data) {
 
-    // var chopped = data.toString('hex').match(/.{2}/g);
-    var durations = durations_from_hex_buffer(data);
+    var durations = command_durations_from_hex_buffer(data);
 
     if (!valid_leader(durations)) return;
 
@@ -114,7 +128,7 @@ function command_id_from_buffer(data) {
 // determine whether or not the buffer is a valid continuation code
 function continue_from_buffer(data) {
 
-    var durations = durations_from_hex_buffer(data);
+    var durations = continue_durations_from_hex_buffer(data);
 
     var on = durations[0];
     var off = durations[1];
@@ -147,6 +161,8 @@ module.exports = function(port) {
 
     ir.on('data', function(data) {
 
+        var start = Date.now();
+
         // don't do any processing if we're just getting interference
         if (data.length < 6) return;
 
@@ -171,13 +187,16 @@ module.exports = function(port) {
             } 
         }
 
+        console.log("duration:", Date.now() - start);
+
     });
 
     return ir;
 }
 
 // expose additional functionality to allow for easy testing
-module.exports.durations_from_hex_buffer = durations_from_hex_buffer;
+module.exports.command_durations_from_hex_buffer = command_durations_from_hex_buffer;
+module.exports.continue_durations_from_hex_buffer = continue_durations_from_hex_buffer;
 module.exports.valid_leader = valid_leader;
 module.exports.binary_from_durations = binary_from_durations;
 module.exports.valid_binary = valid_binary;

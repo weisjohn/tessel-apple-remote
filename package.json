@@ -1,6 +1,6 @@
 {
   "name": "tessel-apple-remote",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "An event-emitter interface to an Apple IR Remote using the Tessel IR Module",
   "main": "index.js",
   "scripts": {

@@ -2,9 +2,7 @@
 
 An event-emitter interface to an Apple IR Remote using the Tessel IR Module
 
-This module takes the burden off of processing the Infared byte buffers and extends the events from `ir-attx4` to provide a higher-level API for programming against Apple remotes. This module supports both the first and second generation of remotes.
-
-
+This module takes the burden off of processing the infared byte buffers and extends the events from [`ir-attx4`](https://github.com/tessel/ir-attx4) to provide a higher-level API for programming against Apple remotes. This module supports both the first and second generation of remotes.
 
 ### usage
 
@@ -20,7 +18,7 @@ apple.on('menu', function() {
 
 ### events
 
-Simple button presses or clicks:
+Simple button presses:
 
  - `menu`
  - `center`
@@ -60,7 +58,7 @@ apple.on('id', function(id) {
 });
 ```
 
-To test this, you can either use two remotes, or you can first press a button on the remote, notice the `id` event fires, then change your remote's ID by pressing and holding the menu + center buttons for about 10 seconds. Once your remote's ID is changed, you should see another `id` event emitted on the next button press.
+To test this, you can either use two remotes, or you can first press a button on the remote, notice the `id` event fires, then change your remote's ID by pressing and holding the menu + center buttons for about 10 seconds. After your remote's ID is changed, another `id` event will be emitted on the next button press. See [examples/lockout.js](examples/lockout.js) for an example of how to isolate your code to the first remote to send an event.
 
 ##### `data`
 
@@ -92,7 +90,7 @@ apple.on('error', function(error) {
 
 ### notes
 
-Here were links that I found helpful while implementing: 
+Helpful reference material on the implemenation: 
 
  - https://github.com/tessel/ir-attx4#api-infrared-on-data-callback-data-Emitted-when-an-infrared-signal-is-detected
  - http://techdocs.altium.com/display/FPGA/NEC+Infrared+Transmission+Protocol

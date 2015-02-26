@@ -67,9 +67,9 @@ var bytes = new Array(4);
 function bytes_from_binary(binary) {
 
     // parse backwards, the least significant bit comes first
-    var len = binary.length;
+    var len = binary.length, byte;
     for (var i = len; i > 0; i -= 8) {
-        var byte = "";
+        byte = "";
         for (var j = 0; j < 7; j++) {
             byte += binary[i - j - 1];
         }
@@ -134,9 +134,9 @@ function continue_from_buffer(data) {
     var off = durations[1];
     var stop = durations[2];
 
-    return (on > 8900 && on < 9150) &&
-        (off > -2350 && off < -2100) &&
-        (stop > 500 && stop < 650);
+    return (8900 < on && on < 9200) &&
+        (-2350 < off && off < -2100) &&
+        (500 < stop && stop < 650);
 }
 
 module.exports = function(port) {

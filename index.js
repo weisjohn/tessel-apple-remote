@@ -22,7 +22,7 @@ function durations_from_hex_buffer(buf) {
 function valid_leader(durations) {
     var on = durations[0];
     var off = durations[1];
-    return !(on < 8900 || on > 9150 || off < -4600 || off > -4400);
+    return (8900 < on && on < 9200) && (-4600 < off && off < -4350);
 }
 
 function binary_from_durations(durations) {

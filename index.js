@@ -45,8 +45,8 @@ function binary_from_durations(durations) {
     return binary;
 }
 
-function valid_durations(durations) {
-    return durations.length != 32;
+function valid_binary(binary) {
+    return binary.length == 32;
 }
 
 function bytes_from_binary(binary) {
@@ -101,7 +101,7 @@ function command_id_from_buffer(data) {
     if (!valid_leader(durations)) return;
 
     var binary = binary_from_durations(durations);
-    if (binary.length != 32) return;
+    if (!valid_binary(binary)) return;
 
     var bytes = bytes_from_binary(binary);
     if (!valid_bytes(bytes)) return;
@@ -184,7 +184,7 @@ module.exports = function(port) {
 module.exports.durations_from_hex_buffer = durations_from_hex_buffer;
 module.exports.valid_leader = valid_leader;
 module.exports.binary_from_durations = binary_from_durations;
-module.exports.valid_durations = valid_durations;
+module.exports.valid_binary = valid_binary;
 module.exports.bytes_from_binary = bytes_from_binary;
 module.exports.valid_bytes = valid_bytes;
 module.exports.command_id_from_bytes = command_id_from_bytes;

@@ -9,9 +9,9 @@ function validate_components(button, str) {
     var hex = new Buffer(str, 'hex');
     var durations = apple.durations_from_hex_buffer(hex);
     assert(apple.valid_leader(durations), 'invalid lead: ' + durations.join());
-    assert(apple.valid_durations(durations), 'invalid binary: ' + durations.join());
 
     var binary = apple.binary_from_durations(durations);
+    assert(apple.valid_binary(binary), 'invalid binary: ' + binary.join());
 
     var bytes = apple.bytes_from_binary(binary);
     assert(apple.valid_bytes(bytes), 'invalid bytes: ' + bytes.join(' '));

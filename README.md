@@ -4,6 +4,8 @@ An event-emitter interface to an Apple IR Remote using the Tessel IR Module
 
 This module takes the burden off of processing the Infared byte buffers and extends the events from `ir-attx4` to provide a higher-level API for programming against Apple remotes. This module supports both the first and second generation of remotes.
 
+
+
 ### usage
 
 ```javascript
@@ -52,7 +54,7 @@ apple.on('50.menu', function() {
 
 To enable discovery on the fly of remote IDs, an `id` event is emitted, with a value of the new id. This event will only be emitted the first time that ID is encountered.
 
-```
+```javascript
 apple.on('id', function(id) {
     console.log('a new challenger appears', id);
 });
@@ -64,7 +66,7 @@ To test this, you can either use two remotes, or you can first press a button on
 
 The standard `data` event is unmodified.
 
-```
+```javascript
 apple.on('data', function(data) {
     // access to the low-level duration stream
     console.log(data.toString('hex'));
@@ -74,7 +76,7 @@ apple.on('data', function(data) {
 
 The standard `error` event is unmodified.
 
-```
+```javascript
 apple.on('error', function(error) {
     console.log(error);
 });
@@ -98,4 +100,14 @@ Here were links that I found helpful while implementing:
  - https://github.com/squeed/AppleRemoteSender/blob/master/AppleRemoteSender.cpp
  - https://hifiduino.wordpress.com/apple-aluminum-remote/ 
 
+### hardware
+
+You need:
+
+ - a [Tessel](https://shop.tessel.io/Base%20Boards/Tessel)
+ - an [IR module](https://shop.tessel.io/Modules/Infrared%20Module)
+ - either a first-generation (white) Apple remote
+ - or a [second-generation (silver) Apple remote](http://store.apple.com/us/product/MC377LL/A/apple-remote)
+
+![](http://i.imgur.com/DqH1EMi.jpg)
 

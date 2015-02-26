@@ -101,7 +101,7 @@ function command_id_from_buffer(data) {
     if (!valid_leader(durations)) return;
 
     var binary = binary_from_durations(durations);
-    if (durations.length != 32) return;
+    if (binary.length != 32) return;
 
     var bytes = bytes_from_binary(binary);
     if (!valid_bytes(bytes)) return;

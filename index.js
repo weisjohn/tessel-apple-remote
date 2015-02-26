@@ -45,7 +45,7 @@ function binary_from_durations(durations) {
 }
 
 function valid_binary(binary) {
-    return binary.length != 32;
+    return binary.length == 32;
 }
 
 function bytes_from_binary(binary) {
@@ -101,7 +101,7 @@ function command_id_from_buffer(data) {
     if (!valid_leader(durations)) return;
 
     var binary = binary_from_durations(durations);
-    if (!valid_binary(durations)) return;
+    if (!valid_binary(binary)) return;
 
     var bytes = bytes_from_binary(binary);
     if (!valid_bytes(bytes)) return;

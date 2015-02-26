@@ -11,7 +11,7 @@ function validate_components(button, str) {
     assert(apple.valid_leader(durations), 'invalid lead: ' + durations.join());
 
     var binary = apple.binary_from_durations(durations);
-    assert(apple.valid_binary(durations), 'invalid binary: ' + binary.join());
+    assert(apple.valid_binary(binary), 'invalid binary: ' + binary.join());
 
     var bytes = apple.bytes_from_binary(binary);
     assert(apple.valid_bytes(bytes), 'invalid bytes: ' + bytes.join(' '));

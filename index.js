@@ -161,8 +161,6 @@ module.exports = function(port) {
 
     ir.on('data', function(data) {
 
-        var start = Date.now();
-
         // don't do any processing if we're just getting interference
         if (data.length < 6) return;
 
@@ -186,8 +184,6 @@ module.exports = function(port) {
                 proxy_emit(id + "." + button);
             } 
         }
-
-        console.log("duration:", Date.now() - start);
 
     });
 

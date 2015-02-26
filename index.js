@@ -13,10 +13,11 @@ function durations_from_hex_buffer(buf) {
     var durations = [];
     var complement = false;
     for (var i = 0; i < buf.length; i += 2) {
-        var number = parseInt("" + buf[i] + buf[i + 1], 16);
-        if (complement) { number = number - (0xffff + 1); }
+        // var number = parseInt("" + buf[i] + buf[i + 1], 16);
+        var number = buf.readInt16BE(i);
+        // if (complement) { number = number - (0xffff + 1); }
         complement = !complement;
-        durations.push(number);
+        if (!isNaN(number)) durations.push(number);
     }
     return durations;
 }
@@ -95,8 +96,8 @@ function command_id_from_bytes(bytes) {
 // a small implementation of the whole flow
 function command_id_from_buffer(data) {
 
-    var chopped = data.toString('hex').match(/.{2}/g);
-    var durations = durations_from_hex_buffer(chopped);
+    // var chopped = data.toString('hex').match(/.{2}/g);
+    var durations = durations_from_hex_buffer(data);
 
     if (!valid_leader(durations)) return;
 
@@ -113,8 +114,8 @@ function command_id_from_buffer(data) {
 
 // determine whether or not the buffer is a valid continuation code
 function continue_from_buffer(data) {
-    var chopped = data.toString('hex').match(/.{2}/g);
-    var durations = durations_from_hex_buffer(chopped);
+    // var chopped = data.toString('hex').match(/.{2}/g);
+    var durations = durations_from_hex_buffer(data);
 
     var on = durations[0];
     var off = durations[1];

@@ -92,11 +92,11 @@ apple.on('error', function(error) {
 
 Helpful reference material on the implemenation: 
 
- - https://github.com/tessel/ir-attx4#api-infrared-on-data-callback-data-Emitted-when-an-infrared-signal-is-detected
- - http://techdocs.altium.com/display/FPGA/NEC+Infrared+Transmission+Protocol
- - http://en.wikipedia.org/wiki/Apple_Remote#Technical_details
- - https://github.com/squeed/AppleRemoteSender/blob/master/AppleRemoteSender.cpp
- - https://hifiduino.wordpress.com/apple-aluminum-remote/ 
+ - [https://github.com/tessel/ir-attx4#api-infrared-on-data-callback-data-Emitted-when-an-infrared-signal-is-detected](https://github.com/tessel/ir-attx4#api-infrared-on-data-callback-data-Emitted-when-an-infrared-signal-is-detected)
+ - [http://techdocs.altium.com/display/FPGA/NEC+Infrared+Transmission+Protocol](http://techdocs.altium.com/display/FPGA/NEC+Infrared+Transmission+Protocol)
+ - [http://en.wikipedia.org/wiki/Apple_Remote#Technical_details](http://en.wikipedia.org/wiki/Apple_Remote#Technical_details)
+ - [https://github.com/squeed/AppleRemoteSender/blob/master/AppleRemoteSender.cpp](https://github.com/squeed/AppleRemoteSender/blob/master/AppleRemoteSender.cpp)
+ - [https://hifiduino.wordpress.com/apple-aluminum-remote/](https://hifiduino.wordpress.com/apple-aluminum-remote/)
 
 ### hardware
 

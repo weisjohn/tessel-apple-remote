@@ -10,13 +10,9 @@ var infrared = require('ir-attx4');
 // parse a Buffer|Array of 16 bit words into signed int durations
 function durations_from_hex_buffer(buf) {
     // https://github.com/tessel/ir-attx4 sends off values through a two's complement system
-    var durations = [];
-    var complement = false;
+    var durations = new Array(buf.length / 2);
     for (var i = 0; i < buf.length; i += 2) {
-        var number = parseInt("" + buf[i] + buf[i + 1], 16);
-        if (complement) { number = number - (0xffff + 1); }
-        complement = !complement;
-        durations.push(number);
+        durations[i / 2] = buf.readInt16BE(i);
     }
     return durations;
 }
@@ -51,16 +47,17 @@ function valid_binary(binary) {
 }
 
 function bytes_from_binary(binary) {
-    var bytes = [];
+    var bytes = new Array(4);
 
     // parse backwards, the least significant bit comes first
     for (var i = binary.length; i > 0; i -= 8) {
-        var byte = 0;
+        var byte = "";
         for (var j = 0; j < 7; j++) {
-            byte += "" + binary[i - j - 1];
+            byte += binary[i - j - 1];
         }
-        bytes.unshift(parseInt(byte, 2));
+        bytes[(i / 8) - 1] = parseInt(byte, 2);
     }
+
     return bytes;
 }
 
@@ -95,8 +92,8 @@ function command_id_from_bytes(bytes) {
 // a small implementation of the whole flow
 function command_id_from_buffer(data) {
 
-    var chopped = data.toString('hex').match(/.{2}/g);
-    var durations = durations_from_hex_buffer(chopped);
+    // var chopped = data.toString('hex').match(/.{2}/g);
+    var durations = durations_from_hex_buffer(data);
 
     if (!valid_leader(durations)) return;
 
@@ -113,8 +110,8 @@ function command_id_from_buffer(data) {
 
 // determine whether or not the buffer is a valid continuation code
 function continue_from_buffer(data) {
-    var chopped = data.toString('hex').match(/.{2}/g);
-    var durations = durations_from_hex_buffer(chopped);
+
+    var durations = durations_from_hex_buffer(data);
 
     var on = durations[0];
     var off = durations[1];
@@ -153,9 +150,10 @@ module.exports = function(port) {
                     ids[id] = true;
                 }
                 ir.emit(button);
-                ir.emit(command_id.id + "." + button);
+                ir.emit(id + "." + button);
             } 
         }
+
     });
 
     return ir;

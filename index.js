@@ -28,10 +28,10 @@ function valid_leader(durations) {
 function binary_from_durations(durations) {
     var binary = new Array(32);
     // skip the leader, ignore the stop bit
-    var len = durations.length - 1;
+    var len = durations.length - 1, on, off;
     for (var i = 2; i < len; i += 2) {
-        var on = durations[i];
-        var off = durations[i + 1];
+        on = durations[i];
+        off = durations[i + 1];
         if (on >= 500 && on < 700) {
             if (off <= -500 && off >= -650) {
                 // basically a fast .push()

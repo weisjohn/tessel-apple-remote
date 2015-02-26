@@ -9,7 +9,7 @@ This module takes the burden off of processing the Infared byte buffers and exte
 ```javascript
 var tessel = require('tessel');
 var port = tessel.port['A'];
-var apple = require('tessel-apple-ir-remote')(port);
+var apple = require('tessel-apple-remote')(port);
 
 apple.on('menu', function() {
     console.log('menu');

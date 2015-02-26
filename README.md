@@ -1,8 +1,8 @@
-# tessel-apple-ir-remote
+# tessel-apple-remote
 
 An event-emitter interface to an Apple IR Remote using the Tessel IR Module
 
-This module takes the burden off of processing the Infared byte buffers and extends the events from `ir-attx4` to provide a higher-level API for programming against Apple remotes.
+This module takes the burden off of processing the Infared byte buffers and extends the events from `ir-attx4` to provide a higher-level API for programming against Apple remotes. This module supports both the first and second generation of remotes.
 
 ### usage
 
@@ -86,3 +86,16 @@ apple.on('error', function(error) {
 1. Plug the IR module into Port A on your Tessel, then connect via USB
 2. `tessel run [script]` to test scripts in [examples](./examples) folder.
 3. Click buttons on your remote and commence mad science.
+
+
+### notes
+
+Here were links that I found helpful while implementing: 
+
+ - https://github.com/tessel/ir-attx4#api-infrared-on-data-callback-data-Emitted-when-an-infrared-signal-is-detected
+ - http://techdocs.altium.com/display/FPGA/NEC+Infrared+Transmission+Protocol
+ - http://en.wikipedia.org/wiki/Apple_Remote#Technical_details
+ - https://github.com/squeed/AppleRemoteSender/blob/master/AppleRemoteSender.cpp
+ - https://hifiduino.wordpress.com/apple-aluminum-remote/ 
+
+

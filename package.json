@@ -1,21 +1,21 @@
 {
-  "name": "tessel-apple-ir-remote",
+  "name": "tessel-apple-remote",
   "version": "0.0.1",
   "description": "An event-emitter interface to an Apple IR Remote using the Tessel IR Module",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node test"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/weisjohn/tessel-apple-ir-remote.git"
+    "url": "https://github.com/weisjohn/tessel-apple-remote.git"
   },
   "author": "John Weis <weis.john@gmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/weisjohn/tessel-apple-ir-remote/issues"
+    "url": "https://github.com/weisjohn/tessel-apple-remote/issues"
   },
-  "homepage": "https://github.com/weisjohn/tessel-apple-ir-remote",
+  "homepage": "https://github.com/weisjohn/tessel-apple-remote",
   "dependencies": {
     "ir-attx4": "^0.2.6"
   }

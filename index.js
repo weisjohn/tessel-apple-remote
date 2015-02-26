@@ -47,16 +47,17 @@ function valid_binary(binary) {
 }
 
 function bytes_from_binary(binary) {
-    var bytes = [];
+    var bytes = new Array(4);
 
     // parse backwards, the least significant bit comes first
     for (var i = binary.length; i > 0; i -= 8) {
-        var byte = 0;
+        var byte = "";
         for (var j = 0; j < 7; j++) {
-            byte += "" + binary[i - j - 1];
+            byte += binary[i - j - 1];
         }
-        bytes.unshift(parseInt(byte, 2));
+        bytes[(i / 8) - 1] = parseInt(byte, 2);
     }
+
     return bytes;
 }
 
@@ -109,7 +110,7 @@ function command_id_from_buffer(data) {
 
 // determine whether or not the buffer is a valid continuation code
 function continue_from_buffer(data) {
-    // var chopped = data.toString('hex').match(/.{2}/g);
+
     var durations = durations_from_hex_buffer(data);
 
     var on = durations[0];
@@ -149,7 +150,7 @@ module.exports = function(port) {
                     ids[id] = true;
                 }
                 ir.emit(button);
-                ir.emit(command_id.id + "." + button);
+                ir.emit(id + "." + button);
             } 
         }
 

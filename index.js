@@ -10,8 +10,9 @@ var infrared = require('ir-attx4');
 // parse a Buffer|Array of 16 bit words into signed int durations
 function durations_from_hex_buffer(buf) {
     // https://github.com/tessel/ir-attx4 sends off values through a two's complement system
-    var durations = new Array(buf.length / 2);
-    for (var i = 0; i < buf.length; i += 2) {
+    var len = buf.length;
+    var durations = new Array(len / 2);
+    for (var i = 0; i < len; i += 2) {
         durations[i / 2] = buf.readInt16BE(i);
     }
     return durations;
@@ -25,9 +26,10 @@ function valid_leader(durations) {
 }
 
 function binary_from_durations(durations) {
-    var binary = [];
+    var binary = []
     // skip the leader, ignore the stop bit
-    for (var i = 2; i < durations.length - 1; i += 2) {
+    var len = durations.length - 1;
+    for (var i = 2; i < len; i += 2) {
         var on = durations[i];
         var off = durations[i + 1];
         if (on >= 500 && on < 700) {
@@ -50,7 +52,8 @@ function bytes_from_binary(binary) {
     var bytes = new Array(4);
 
     // parse backwards, the least significant bit comes first
-    for (var i = binary.length; i > 0; i -= 8) {
+    var len = binary.length;
+    for (var i = len; i > 0; i -= 8) {
         var byte = "";
         for (var j = 0; j < 7; j++) {
             byte += binary[i - j - 1];

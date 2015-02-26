@@ -127,7 +127,21 @@ module.exports = function(port) {
     var ir = infrared.use(port);
 
     // on each data packet received, process the whole flow
-    var button, ids = {}, id;
+    var button, ids = {}, id, listeners = {};
+
+    // selectively emit, only if someone is listening
+    function proxy_emit(event, data) {
+        if (listeners[event]) ir.emit(event, data);
+    }
+
+    ir.on('newListener', function(event) {
+        listeners[event] = true;
+    });
+
+    ir.on('removeListener', function(event) {
+        listeners[event] = false;
+    });
+
     ir.on('data', function(data) {
 
         // don't do any processing if we're just getting interference
@@ -137,8 +151,8 @@ module.exports = function(port) {
         if (data.length == 6) {
             // we can't send a continue if we miss the first button press
             if (button && continue_from_buffer(data)) {
-                ir.emit(button + ".long");
-                ir.emit(id + "." + button + ".long");
+                proxy_emit(button + ".long");
+                proxy_emit(id + "." + button + ".long");
             }
         } else if (data.length == 134) {
             command_id = command_id_from_buffer(data);
@@ -146,11 +160,11 @@ module.exports = function(port) {
                 button = command_id.command;
                 if (id != command_id.id) {
                     id = command_id.id;
-                    if (!ids[id]) ir.emit('id', id);
+                    if (!ids[id]) proxy_emit('id', id);
                     ids[id] = true;
                 }
-                ir.emit(button);
-                ir.emit(id + "." + button);
+                proxy_emit(button);
+                proxy_emit(id + "." + button);
             } 
         }
 

@@ -10,9 +10,9 @@ var infrared = require('ir-attx4');
 // parse a Buffer|Array of 16 bit words into signed int durations
 function durations_from_hex_buffer(buf) {
     // https://github.com/tessel/ir-attx4 sends off values through a two's complement system
-    var durations = [];
+    var durations = new Array(buf.length / 2);
     for (var i = 0; i < buf.length; i += 2) {
-        durations.push(buf.readInt16BE(i));
+        durations[i / 2] = buf.readInt16BE(i);
     }
     return durations;
 }

@@ -26,7 +26,7 @@ function valid_leader(durations) {
 }
 
 function binary_from_durations(durations) {
-    var binary = []
+    var binary = new Array(32);
     // skip the leader, ignore the stop bit
     var len = durations.length - 1;
     for (var i = 2; i < len; i += 2) {
@@ -34,9 +34,9 @@ function binary_from_durations(durations) {
         var off = durations[i + 1];
         if (on >= 500 && on < 700) {
             if (off <= -500 && off >= -650) {
-                binary.push(0);
+                binary[i / 2 - 1] = 0;
             } else if (off < -1600 && off >= -1750) {
-                binary.push(1);
+                binary[i / 2 - 1] = 1;
             }
         }
     }
